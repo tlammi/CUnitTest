@@ -38,6 +38,7 @@
 }while(0)
 
 #define CUnitTest_assertStrEqual(str1, str2)do{\
+  printNote("Testing CUnitTest_assertStrEqual("#str1", "#str2")...\n");\
   if(strcmp(str1, str2)){\
     CUnitTest_logAssertStrEqualError(__FILE__, __FUNCTION__, __LINE__, str1, str2);\
   } else{\
