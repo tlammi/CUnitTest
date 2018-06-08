@@ -16,10 +16,16 @@ void my_test_func(void){
 
 }
 
+void my_test_func_2(void){
+  CUnitTest_assert(100 == 190);
+  CUnitTest_assertEqual(100, 200);
+}
+
 
 int main(){
   CUnitTest_addTestSet("My set");
   CUnitTest_addTestFunc("My set", my_test_func);
+  CUnitTest_addTestFunc("My set", my_test_func_2);
   
   CUnitTest_addTestSet("My set 2");
   CUnitTest_addTestFunc("My set 2", my_test_func);

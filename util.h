@@ -24,6 +24,7 @@
   printf(__VA_ARGS__);\
   printf(RESET);\
 }while(0);
+
 #define printErr(...)do{\
   printf(RED);\
   printf(__VA_ARGS__);\

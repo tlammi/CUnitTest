@@ -1,4 +1,5 @@
 #include "test_set_database.h"
+#include "util.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -59,6 +60,11 @@ void CUnitTest_execute(void){
 
   for(i=0;i<set_count;i++){
     struct TestSet test_set = gTestSet_database.test_sets[i];
+    printNote("####################################################\n"
+              "# executing set: %s\n"
+              "####################################################\n",
+               test_set.name);
+               
     gpCurrentTestSet = &test_set;
     int ii;
     size_t func_count = test_set.test_func_count;
