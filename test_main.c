@@ -1,32 +1,19 @@
 
-//#include "registration.h"
-
 #include <stdio.h>
 
 #include "test_set_database.h"
-
-#define Cunit_assert(assertion) \
-do{\
-  if(!(assertion)){\
-    Cunit_registerFailure(__FILE__, __FUNCTION__, __LINE__, #assertion);\
-  } else {\
-    Cunit_registerOk();\
-  }\
-}while(0)
-
-
-
-void Cunit_registerFailure(const char* file_name, const char* function_name, int line, char* assertion){
-  printf("Assertion failure: \n\tfile %s\n\tfunction %s\n\tline %d\n\tassertion %s\n",file_name, function_name, line, assertion);
-}
-void Cunit_registerOk(){
-  printf("Assertion ok\n");
-}
-
+#include "assertions.h"
 
 void my_test_func(void){
-  Cunit_assert(1 == 0);
-  Cunit_assert(1 == 1);
+  CUnitTest_assert(1 == 0);
+  CUnitTest_assert(1 == 1);
+  CUnitTest_assertEqual(1,0);
+  CUnitTest_assertEqual(1,1);
+  CUnitTest_assertNotEqual(1,1);
+  CUnitTest_assertNotEqual(1,0);
+  CUnitTest_assertStrEqual("asdf","asdfg");
+  CUnitTest_assertStrEqual("asdf","asdf");
+
 }
 
 
