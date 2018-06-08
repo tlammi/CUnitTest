@@ -11,12 +11,14 @@ typedef void (*test_func)(void);
 struct TestFunc{
   const char* name;
   test_func test_func_ptr;
+  char failed;
 };
 
 struct TestSet {
   struct TestFunc test_funcs[C_UNIT_TEST_MAX_FUNCS_IN_SET];
   size_t test_func_count;
   const char* name;
+  char failed;
 };
 
 struct TestSetDatabase{
@@ -36,6 +38,8 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
                 test_func funcptr, const char* func_name);
 void CUnitTest_execute(void);
 
+
+void __CUnitTest_registerFailure();
 
 const char* __CUnitTest_getCurrentSet();
 

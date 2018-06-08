@@ -10,6 +10,7 @@ struct TestSetDatabase gTestSet_database = {
 
 
 struct TestSet* gpCurrentTestSet;
+struct TestFunc* gpCurrentTestFunc;
 
 void CUnitTest_addTestSet(const char* test_set_name){
 
@@ -47,6 +48,7 @@ void __CUnitTest_addTestFunc(const char* test_set_name, test_func funcptr,
   if(test_set->test_func_count < C_UNIT_TEST_MAX_FUNCS_IN_SET){
     test_set->test_funcs[test_set->test_func_count].test_func_ptr = funcptr;
     test_set->test_funcs[test_set->test_func_count].name = funcname;
+    test_set->test_funcs[test_set->test_func_count].failed = 0;
     test_set->test_func_count++;
   } else{
     printf("Too many functions in set!\n");
@@ -54,6 +56,29 @@ void __CUnitTest_addTestFunc(const char* test_set_name, test_func funcptr,
 
 }
 
+static void printConclusion(){
+  printNote("\n\n"
+            "#############################################\n"
+            "# Printing conclusion\n"
+            "#############################################\n")
+  struct TestSet* testsets = gTestSet_database.test_sets;
+  size_t set_count = gTestSet_database.set_count;
+  int i, ii;
+  for(i=0; i<set_count; i++){
+    if(testsets[i].failed){
+      printErr("Failed test set: %s\n",testsets[i].name);
+      size_t func_count = testsets[i].test_func_count;
+      struct TestFunc* funcs = testsets[i].test_funcs;
+
+      for(ii=0; ii<func_count; ii++){
+        if(funcs[ii].failed){
+          printErr("\tFailed test function: %s\n",funcs[ii].name);
+        }
+      }
+    }
+  }
+
+}
 
 void CUnitTest_execute(void){
 
@@ -61,27 +86,33 @@ void CUnitTest_execute(void){
   int i;
 
   for(i=0;i<set_count;i++){
-    struct TestSet test_set = gTestSet_database.test_sets[i];
+    struct TestSet* test_set = &gTestSet_database.test_sets[i];
     printNote(BOLD"####################################################\n"
               "# executing set: %s\n"
               "####################################################\n\n"RESET,
-               test_set.name);
+               test_set->name);
 
-    gpCurrentTestSet = &test_set;
+    gpCurrentTestSet = test_set;
     int ii;
-    size_t func_count = test_set.test_func_count;
+    size_t func_count = test_set->test_func_count;
     for(ii=0;ii<func_count;ii++){
       printNote("\n"
                 BOLD"##### executing function: %s #####\n"RESET
                 "\n",
-                test_set.test_funcs[ii].name);
-      test_set.test_funcs[ii].test_func_ptr();
+                test_set->test_funcs[ii].name);
+      gpCurrentTestFunc = &test_set->test_funcs[ii];
+      test_set->test_funcs[ii].test_func_ptr();
     }
   }
 
-
+  printConclusion();
 }
 
+
+void __CUnitTest_registerFailure(){
+  gpCurrentTestFunc->failed = 1;
+  gpCurrentTestSet->failed = 1;
+}
 
 
 

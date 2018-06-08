@@ -13,7 +13,8 @@
 #define CUnitTest_assert(assertion) do{\
   printNote("Testing CUnitTest_assert(" #assertion")...\n");                                       \
   if(!(assertion)){                                                           \
-    CUnitTest_logAssertError(__FILE__, __FUNCTION__, __LINE__, #assertion);   \
+    CUnitTest_logAssertError(__FILE__, __FUNCTION__, __LINE__, #assertion);\
+    __CUnitTest_registerFailure();   \
   } else {                                                                    \
     printOK("Assertion" BOLD " ok\n" RESET);                                                 \
   }                                                                           \
