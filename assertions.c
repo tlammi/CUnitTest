@@ -31,7 +31,7 @@ void CUnitTest_logAssertNotEqualError(const char* file, const char* func,
   (void)val1;
   (void)val2;
   printPrefix(file, func, line);
-  printErr("Values where equal\n");
+  printErr("Values were equal\n");
 }
 
 void CUnitTest_logAssertStrEqualError(const char* file, const char* func,

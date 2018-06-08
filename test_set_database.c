@@ -29,7 +29,8 @@ void CUnitTest_addTestSet(const char* test_set_name){
 
 }
 
-void CUnitTest_addTestFunc(const char* test_set_name, test_func funcptr){
+void __CUnitTest_addTestFunc(const char* test_set_name, test_func funcptr,
+                             const char* funcname){
   size_t set_count = gTestSet_database.set_count;
   if(set_count == 0){
     printf("Error: No registered sets\n");
@@ -44,7 +45,8 @@ void CUnitTest_addTestFunc(const char* test_set_name, test_func funcptr){
   }
 
   if(test_set->test_func_count < C_UNIT_TEST_MAX_FUNCS_IN_SET){
-    test_set->test_funcs[test_set->test_func_count] = funcptr;
+    test_set->test_funcs[test_set->test_func_count].test_func_ptr = funcptr;
+    test_set->test_funcs[test_set->test_func_count].name = funcname;
     test_set->test_func_count++;
   } else{
     printf("Too many functions in set!\n");
@@ -60,16 +62,20 @@ void CUnitTest_execute(void){
 
   for(i=0;i<set_count;i++){
     struct TestSet test_set = gTestSet_database.test_sets[i];
-    printNote("####################################################\n"
+    printNote(BOLD"####################################################\n"
               "# executing set: %s\n"
-              "####################################################\n",
+              "####################################################\n\n"RESET,
                test_set.name);
-               
+
     gpCurrentTestSet = &test_set;
     int ii;
     size_t func_count = test_set.test_func_count;
     for(ii=0;ii<func_count;ii++){
-      test_set.test_funcs[ii]();
+      printNote("\n"
+                BOLD"##### executing function: %s #####\n"RESET
+                "\n",
+                test_set.test_funcs[ii].name);
+      test_set.test_funcs[ii].test_func_ptr();
     }
   }
 

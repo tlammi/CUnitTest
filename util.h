@@ -11,11 +11,14 @@
 #define CYN   "\x1B[36m"
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
+#define BOLD  "\x1B[1m"
 
 
-
-
-
+#define printOK(...) do{\
+  printf(GRN);\
+  printf(__VA_ARGS__);\
+  printf(RESET);\
+}while(0)
 #define printNote(...)do{\
   printf(__VA_ARGS__);\
 }while(0);
