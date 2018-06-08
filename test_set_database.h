@@ -25,4 +25,8 @@ void CUnitTest_addTestSet(const char* test_set_name);
 void CUnitTest_addTestFunc(const char* test_set_name, test_func funcptr);
 void CUnitTest_execute(void);
 
+
+const char* __CUnitTest_getCurrentSet();
+
+
 #endif

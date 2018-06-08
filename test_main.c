@@ -20,7 +20,9 @@ void my_test_func(void){
 int main(){
   CUnitTest_addTestSet("My set");
   CUnitTest_addTestFunc("My set", my_test_func);
-
+  
+  CUnitTest_addTestSet("My set 2");
+  CUnitTest_addTestFunc("My set 2", my_test_func);
 
 
   CUnitTest_execute();

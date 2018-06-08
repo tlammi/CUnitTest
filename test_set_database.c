@@ -7,6 +7,9 @@ struct TestSetDatabase gTestSet_database = {
   .set_count = 0
 };
 
+
+struct TestSet* gpCurrentTestSet;
+
 void CUnitTest_addTestSet(const char* test_set_name){
 
   if(gTestSet_database.set_count < C_UNIT_TEST_MAX_TEST_SETS){
@@ -56,6 +59,7 @@ void CUnitTest_execute(void){
 
   for(i=0;i<set_count;i++){
     struct TestSet test_set = gTestSet_database.test_sets[i];
+    gpCurrentTestSet = &test_set;
     int ii;
     size_t func_count = test_set.test_func_count;
     for(ii=0;ii<func_count;ii++){
@@ -63,5 +67,12 @@ void CUnitTest_execute(void){
     }
   }
 
-  
+
+}
+
+
+
+
+const char* __CUnitTest_getCurrentSet(){
+ return gpCurrentTestSet->name;
 }
