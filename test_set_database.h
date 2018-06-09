@@ -4,22 +4,22 @@
 #include <stdlib.h>
 
 #include "constants.h"
-
+#include "test_func.h"
 
 typedef void (*test_func)(void);
 
-struct TestFunc{
+/*struct TestFunc{
   const char* name;
   test_func test_func_ptr;
   char failed;
-};
+};*/
 
-struct TestSet {
+/*struct TestSet {
   struct TestFunc test_funcs[C_UNIT_TEST_MAX_FUNCS_IN_SET];
   size_t test_func_count;
   const char* name;
   char failed;
-};
+};*/
 
 struct TestSetDatabase{
   size_t set_count;
