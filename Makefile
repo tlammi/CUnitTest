@@ -1,0 +1,10 @@
+
+CC = gcc
+C_FLAGS = -Wall -pthread
+
+
+SRCS = c_unit_test.c test_func.c test_main.c test_set.c assertions.c
+
+
+all:
+	${CC} ${C_FLAGS} ${SRCS}

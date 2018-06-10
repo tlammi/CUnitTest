@@ -2,6 +2,7 @@
 #define UTIL_H
 
 #include <stdio.h>
+#include "constants.h"
 
 #define RED   "\x1B[31m"
 #define GRN   "\x1B[32m"
@@ -19,9 +20,11 @@
   printf(__VA_ARGS__);\
   printf(RESET);\
 }while(0)
+
 #define printNote(...)do{\
   printf(__VA_ARGS__);\
 }while(0);
+
 #define printWarn(...)do{\
   printf(YEL); \
   printf(__VA_ARGS__);\
@@ -33,5 +36,16 @@
   printf(__VA_ARGS__);\
   printf(RESET);\
 }while(0);
+
+#ifdef DEBUG_PRINT
+#define printDebug(...)do{\
+  printf(BLU);\
+  printf(__VA_ARGS__);\
+  printf(RESET);\
+}while(0);
+#else
+#define printDebug(...)
+#endif
+
 
 #endif
