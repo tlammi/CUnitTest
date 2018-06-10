@@ -1,4 +1,3 @@
-//#include "assertions.h"
 #include "c_unit_test.h"
 
 static inline void printPrefix(const char* file,

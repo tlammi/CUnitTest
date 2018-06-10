@@ -3,28 +3,16 @@
 
 #include "test_set.h"
 #include "test_func.h"
+#include "test_thread.h"
 
 #include "util.h"
 
 #include <string.h>
-#include <stdlib.h>
-#include <pthread.h>
-
-#define _GNU_SOURCE
-#include <unistd.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-
-struct ThreadSetTuple{
-  pid_t tid;
-  struct TestSet* current_set;
-};
 
 struct TestSetDatabase{
   int set_count;
   int thread_count;
-  pthread_t pthreads[C_UNIT_TEST_MAX_THREADS];
-  struct ThreadSetTuple tsTuples[C_UNIT_TEST_MAX_THREADS];
+  struct TestThread test_threads[C_UNIT_TEST_MAX_THREADS];
   struct TestSet test_sets[C_UNIT_TEST_MAX_TEST_SETS];
 };
 
@@ -61,7 +49,7 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
 }
 
 
-void* test_thread(void* p){
+/*void* test_thread(void* p){
   struct ThreadSetTuple* param = (struct ThreadSetTuple*)p;
   param->tid = syscall(SYS_gettid);
   printDebug("Thread %d executing\n",param->tid);
@@ -74,7 +62,7 @@ void* test_thread(void* p){
     TestSet_exec(&gtsdb.test_sets[i]);
   }
   return NULL;
-}
+}*/
 
 
 void CUnitTest_execute(void){
@@ -86,7 +74,9 @@ void CUnitTest_execute(void){
   int thread_count = gtsdb.thread_count;
 
   for(int i = 0; i<thread_count; i++){
-    pthread_create(&gtsdb.pthreads[i], NULL, test_thread, &gtsdb.tsTuples[i]);
+    gtsdb.test_threads[i] = TestThread_init(gtsdb.test_sets, gtsdb.set_count, i, thread_count);
+    TestThread_exec(&gtsdb.test_threads[i]);
+    //pthread_create(&gtsdb.pthreads[i], NULL, test_thread, &gtsdb.tsTuples[i]);
   }
 
   printNote("Failed test sets and functions:\n");
@@ -99,23 +89,34 @@ void CUnitTest_execute(void){
   }
 }
 
-static struct TestSet* getCurrentSetForThread(){
+static struct TestThread* getTestThread(){
+  // Thread id of the calling thread
   pid_t tid = syscall(SYS_gettid);
+  // Guess for the offset in array
   long offset = tid - getpid();
-  if(offset < gtsdb.thread_count && gtsdb.tsTuples[offset].tid == tid ){
-    return gtsdb.tsTuples[offset].current_set;
-  } else {
+
+  if(offset < gtsdb.thread_count && TestThread_getTid(&gtsdb.test_threads[offset]) == tid){
+    return &gtsdb.test_threads[offset];
+  } else{
     for(int i = 0; i < gtsdb.thread_count; i++){
-      if(gtsdb.tsTuples[i].tid == tid){
-        return gtsdb.tsTuples[i].current_set;
+      if(TestThread_getTid(&gtsdb.test_threads[i]) == tid) {
+        return &gtsdb.test_threads[i];
       }
     }
   }
+
   return NULL;
+
 }
 
 void __CUnitTest_registerFailure(){
   printDebug("Registering failure\n");
-  struct TestSet* pset = getCurrentSetForThread();
-  TestSet_setFailed(pset, 1);
+  struct TestThread* thread = getTestThread();
+  if(thread != NULL){
+    TestThread_registerFailure(thread);
+  }
+  else{
+    printErr("Thread panic\n");
+    exit(-1);
+  }
 }
