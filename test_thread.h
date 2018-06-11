@@ -26,6 +26,8 @@ struct TestThread TestThread_init(struct TestSet* arr, int arr_size, int offset,
 
 void TestThread_exec(struct TestThread* thread);
 
+void TestThread_join(struct TestThread* thread);
+
 void TestThread_registerFailure(struct TestThread* thread);
 
 pid_t TestThread_getTid(struct TestThread* thread);

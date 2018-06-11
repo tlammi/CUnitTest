@@ -49,22 +49,6 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
 }
 
 
-/*void* test_thread(void* p){
-  struct ThreadSetTuple* param = (struct ThreadSetTuple*)p;
-  param->tid = syscall(SYS_gettid);
-  printDebug("Thread %d executing\n",param->tid);
-  long long offset = ((unsigned long long) param
-                      -(unsigned long long) gtsdb.tsTuples)/sizeof(*param);
-  printDebug("Got offset %lld\n",offset)
-  for(int i = offset; i<gtsdb.set_count; i += gtsdb.thread_count){
-    printDebug("Thread %d executing:\n",param->tid);
-    param->current_set = &gtsdb.test_sets[i];
-    TestSet_exec(&gtsdb.test_sets[i]);
-  }
-  return NULL;
-}*/
-
-
 void CUnitTest_execute(void){
 
   pid_t tid = syscall(SYS_gettid);
@@ -76,9 +60,11 @@ void CUnitTest_execute(void){
   for(int i = 0; i<thread_count; i++){
     gtsdb.test_threads[i] = TestThread_init(gtsdb.test_sets, gtsdb.set_count, i, thread_count);
     TestThread_exec(&gtsdb.test_threads[i]);
-    //pthread_create(&gtsdb.pthreads[i], NULL, test_thread, &gtsdb.tsTuples[i]);
   }
 
+  for(int i = 0; i < thread_count; i++){
+    TestThread_join(&gtsdb.test_threads[i]);
+  }
   printNote("Failed test sets and functions:\n");
   int i;
   for(i=0; i<gtsdb.set_count; i++){

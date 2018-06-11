@@ -33,6 +33,11 @@ void TestThread_exec(struct TestThread* thread){
   pthread_create(&thread->ptid, NULL, thread_func, thread);
 }
 
+
+void TestThread_join(struct TestThread* thread){
+  pthread_join(thread->ptid, NULL);
+}
+
 void TestThread_registerFailure(struct TestThread* thread){
   TestSet_setFailed(thread->current_set, 1);
 }
