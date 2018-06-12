@@ -39,7 +39,7 @@ void TestThread_join(struct TestThread* thread){
 }
 
 void TestThread_registerFailure(struct TestThread* thread){
-  TestSet_setFailed(thread->current_set, 1);
+  TestSet_registerFailure(thread->current_set);
 }
 
 pid_t TestThread_getTid(struct TestThread* thread){

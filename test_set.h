@@ -10,7 +10,7 @@ struct TestSet {
   int test_func_count;
   int current_test_func_index;
   const char* name;
-  char failed;
+  int failed;
 };
 
 struct TestSet TestSet_newTestSet(const char* name);
@@ -21,9 +21,11 @@ void TestSet_exec(struct TestSet* handl);
 
 const char* TestSet_getName(struct TestSet* handl);
 
-void TestSet_setFailed(struct TestSet* handl, char failed);
+void TestSet_registerFailure(struct TestSet* handl);
 
-char TestSet_getFailed(struct TestSet* handl);
+void TestSet_setFailed(struct TestSet* handl, int failed);
+
+int TestSet_getFailed(struct TestSet* handl);
 
 void TestSet_printFailedFunctions(struct TestSet* handl);
 

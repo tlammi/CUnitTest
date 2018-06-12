@@ -19,12 +19,16 @@ void TestFunc_exec(struct TestFunc* handl){
   handl->test_func_ptr();
 }
 
-void TestFunc_setFailed(struct TestFunc* handl, char failed){
+void TestFunc_registerFailure(struct TestFunc* handl){
+  handl->failed++;
+}
+
+void TestFunc_setFailed(struct TestFunc* handl, int failed){
   handl->failed = failed;
 }
 
 
-char TestFunc_getFailed(struct TestFunc* handl){
+int TestFunc_getFailed(struct TestFunc* handl){
   return handl->failed;
 }
 

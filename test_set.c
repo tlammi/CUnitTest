@@ -49,7 +49,16 @@ const char* TestSet_getName(struct TestSet* handl){
   return handl->name;
 }
 
-void TestSet_setFailed(struct TestSet* handl, char failed){
+
+void TestSet_registerFailure(struct TestSet* handl){
+  if(TestFunc_getFailed(&handl->test_funcs[handl->current_test_func_index]) == 0){
+    handl->failed++;
+  }
+
+  TestFunc_registerFailure(&handl->test_funcs[handl->current_test_func_index]);
+}
+
+void TestSet_setFailed(struct TestSet* handl, int failed){
   if(handl == NULL) {
     printErr("handl cannot be NULL\n");
     return;
@@ -59,7 +68,7 @@ void TestSet_setFailed(struct TestSet* handl, char failed){
   TestFunc_setFailed(&handl->test_funcs[handl->current_test_func_index], 1);
 }
 
-char TestSet_getFailed(struct TestSet* handl){
+int TestSet_getFailed(struct TestSet* handl){
   if(handl == NULL){
     printErr("handl cannot be null");
     return -1;
