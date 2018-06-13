@@ -38,8 +38,8 @@ void TestThread_join(struct TestThread* thread){
   pthread_join(thread->ptid, NULL);
 }
 
-void TestThread_registerFailure(struct TestThread* thread){
-  TestSet_registerFailure(thread->current_set);
+void TestThread_registerFailure(struct TestThread* thread, const char* info_str){
+  TestSet_registerFailure(thread->current_set, info_str);
 }
 
 pid_t TestThread_getTid(struct TestThread* thread){

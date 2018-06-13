@@ -21,7 +21,7 @@ void TestSet_exec(struct TestSet* handl);
 
 const char* TestSet_getName(struct TestSet* handl);
 
-void TestSet_registerFailure(struct TestSet* handl);
+void TestSet_registerFailure(struct TestSet* handl, const char* info_str);
 
 void TestSet_setFailed(struct TestSet* handl, int failed);
 

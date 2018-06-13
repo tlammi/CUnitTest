@@ -28,7 +28,7 @@ void TestThread_exec(struct TestThread* thread);
 
 void TestThread_join(struct TestThread* thread);
 
-void TestThread_registerFailure(struct TestThread* thread);
+void TestThread_registerFailure(struct TestThread* thread, const char* info_str);
 
 pid_t TestThread_getTid(struct TestThread* thread);
 

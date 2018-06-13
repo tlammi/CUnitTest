@@ -14,7 +14,7 @@ void __CUnitTest_logAssertError(const char* file,
                               const char* assertion){
   printPrefix(file, func, line);
   printErr("assertion: %s\n",assertion);
-  __CUnitTest_registerFailure();
+  __CUnitTest_registerFailure("1");
 }
 
 void __CUnitTest_logAssertEqualError(const char* file, const char* func,
@@ -22,7 +22,7 @@ void __CUnitTest_logAssertEqualError(const char* file, const char* func,
                                    const int val2){
   printPrefix(file, func, line);
   printErr("first value: %d\n\tsecond value: %d\n",val1, val2);
-  __CUnitTest_registerFailure();
+  __CUnitTest_registerFailure("2");
 }
 
 void __CUnitTest_logAssertNotEqualError(const char* file, const char* func,
@@ -32,7 +32,7 @@ void __CUnitTest_logAssertNotEqualError(const char* file, const char* func,
   (void)val2;
   printPrefix(file, func, line);
   printErr("Values were equal\n");
-  __CUnitTest_registerFailure();
+  __CUnitTest_registerFailure("3");
 }
 
 void __CUnitTest_logAssertStrEqualError(const char* file, const char* func,
@@ -40,5 +40,5 @@ void __CUnitTest_logAssertStrEqualError(const char* file, const char* func,
                                    const char* str2){
   printPrefix(file, func, line);
   printErr("first str: %s\n\tsecond str: %s\n",str1, str2);
-  __CUnitTest_registerFailure();
+  __CUnitTest_registerFailure("4");
 }

@@ -50,12 +50,12 @@ const char* TestSet_getName(struct TestSet* handl){
 }
 
 
-void TestSet_registerFailure(struct TestSet* handl){
+void TestSet_registerFailure(struct TestSet* handl, const char* info_str){
   if(TestFunc_getFailed(&handl->test_funcs[handl->current_test_func_index]) == 0){
     handl->failed++;
   }
 
-  TestFunc_registerFailure(&handl->test_funcs[handl->current_test_func_index]);
+  TestFunc_registerFailure(&handl->test_funcs[handl->current_test_func_index], info_str);
 }
 
 void TestSet_setFailed(struct TestSet* handl, int failed){
@@ -77,9 +77,11 @@ int TestSet_getFailed(struct TestSet* handl){
   return handl->failed;
 }
 
+
 void TestSet_printFailedFunctions(struct TestSet* handl){
   int i;
   for(i=0; i<handl->test_func_count; i++){
     printErr("\t%s\n",TestFunc_getName(&handl->test_funcs[i]));
+    TestFunc_printFailedAsserts(&handl->test_funcs[i]);
   }
 }

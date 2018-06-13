@@ -73,6 +73,9 @@ void CUnitTest_execute(void){
       TestSet_printFailedFunctions(&gtsdb.test_sets[i]);
     }
   }
+
+
+  
 }
 
 static struct TestThread* getTestThread(){
@@ -95,11 +98,11 @@ static struct TestThread* getTestThread(){
 
 }
 
-void __CUnitTest_registerFailure(){
+void __CUnitTest_registerFailure(const char* info_str){
   printDebug("Registering failure\n");
   struct TestThread* thread = getTestThread();
   if(thread != NULL){
-    TestThread_registerFailure(thread);
+    TestThread_registerFailure(thread, info_str);
   }
   else{
     printErr("Thread panic\n");

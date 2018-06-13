@@ -98,6 +98,6 @@ void __CUnitTest_logAssertStrEqualError(const char* file, const char* func,
 void __CUnitTest_addTestFunc(const char* test_set_name,
                                      test_func funcptr, const char* func_name);
 
-void __CUnitTest_registerFailure();
+void __CUnitTest_registerFailure(const char* info_str);
 
 #endif
