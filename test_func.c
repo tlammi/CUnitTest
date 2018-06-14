@@ -9,10 +9,16 @@ struct TestFunc TestFunc_newTestFunc(const char* name, test_func funcptr){
     .test_func_ptr = funcptr,
     .failed = 0
   };
-  memset(tf.failed_assertion_infos, 0,
-    C_UNIT_TEST_MAX_ASSERTS_IN_FUNC*C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN);
+  //memset(tf.failed_assertion_infos, 0,
+  //  C_UNIT_TEST_MAX_ASSERTS_IN_FUNC*C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN);
+  tf.list = LinkedList_new();
   return tf;
 }
+
+void TestFunc_destroy(struct TestFunc* handl){
+  LinkedList_destroy(&handl->list);
+}
+
 
 void TestFunc_exec(struct TestFunc* handl){
   printNote("\n"
@@ -23,9 +29,10 @@ void TestFunc_exec(struct TestFunc* handl){
 }
 
 void TestFunc_registerFailure(struct TestFunc* handl, const char* info_str){
-  if(handl != NULL && handl->failed < C_UNIT_TEST_MAX_ASSERTS_IN_FUNC){
-    memcpy(handl->failed_assertion_infos[handl->failed],
-      info_str, C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN);
+  if(handl != NULL){
+    LinkedList_pushBack(&handl->list, info_str, strlen(info_str));
+    /*memcpy(handl->failed_assertion_infos[handl->failed],
+      info_str, C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN);*/
     handl->failed++;
   }
 }
@@ -46,7 +53,16 @@ const char* TestFunc_getName(struct TestFunc* handl){
 }
 
 void TestFunc_printFailedAsserts(struct TestFunc* handl){
+  char* info_str;
+  int str_len;
+  int ret_val;
+  ret_val = LinkedList_getCurr(&handl->list, (void**)&info_str, &str_len);
+  while(ret_val == 0){
+    printf("%s\n", info_str);
+    ret_val = LinkedList_getNext(&handl->list, (void**)&info_str, &str_len);
+  }
+  /*
   for(int i = 0; i< handl->failed; i++){
     printErr("%s\n",&handl->failed_assertion_infos[i][0]);
-  }
+  }*/
 }

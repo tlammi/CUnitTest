@@ -15,6 +15,8 @@ struct TestSet {
 
 struct TestSet TestSet_newTestSet(const char* name);
 
+void TestSet_destroy(struct TestSet* handl);
+
 void TestSet_addTestFunc(struct TestSet* handl, const char* funcname, test_func funcptr);
 
 void TestSet_exec(struct TestSet* handl);
