@@ -5,7 +5,7 @@
 #include "test_func.h"
 #include "test_thread.h"
 
-#include "util.h"
+#include "print.h"
 
 #include <string.h>
 
@@ -75,7 +75,7 @@ void CUnitTest_execute(void){
   }
 
 
-  
+
 }
 
 static struct TestThread* getTestThread(){

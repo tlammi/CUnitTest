@@ -1,5 +1,5 @@
 #include "test_func.h"
-#include "util.h"
+#include "print.h"
 
 #include <string.h>
 
