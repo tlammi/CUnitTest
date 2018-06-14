@@ -1,5 +1,5 @@
 #include "linked_list.h"
-
+#include "util.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,6 +27,7 @@ void LinkedList_pushBack(struct LinkedList* handl, const void* val, int bytes){
 
 
   struct LinkedNode* ptr = malloc(sizeof(struct LinkedNode)+bytes);
+
   memcpy(&ptr->val, val, bytes);
   ptr->bytes = bytes;
   ptr->next = NULL;
@@ -62,6 +63,7 @@ void LinkedList_pushFront(struct LinkedList* handl, const void* val, int bytes){
 }
 
 int LinkedList_getNext(struct LinkedList* handl, void** val, int* bytes){
+  //printDebug("current: %d, tail: %d, current->next: %d\n",handl->current, handl->tail, handl->current->next);
   if(handl->current == handl->tail) return -1;
   handl->current = handl->current->next;
   *val = &handl->current->val;
@@ -83,4 +85,14 @@ int LinkedList_getCurr(struct LinkedList* handl, void** val, int* bytes){
   *val = &handl->current->val;
   *bytes = handl->current->bytes;
   return 0;
+}
+
+
+
+void LinkedList_setCurrToFront(struct LinkedList* handl){
+  handl->current = handl->head;
+}
+
+void LinkedList_setCurrToBack(struct LinkedList* handl){
+  handl->current = handl->tail;
 }

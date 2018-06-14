@@ -32,11 +32,4 @@ int main(){
 
   CUnitTest_execute();
 
-
-  /*CUnitTest_addTestSet("My test set");
-  CUnitTest_addTestFunc("My test set", my_test_func);
-  CUnitTest_addTestFunc("My test set", my_test_func_2);
-
-  CUnitTest_execute();
-  */
 }

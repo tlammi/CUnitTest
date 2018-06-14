@@ -6,9 +6,10 @@
 
 
 struct TestSet {
-  struct TestFunc test_funcs[C_UNIT_TEST_MAX_FUNCS_IN_SET];
-  int test_func_count;
-  int current_test_func_index;
+  struct LinkedList list;
+  //struct TestFunc test_funcs[C_UNIT_TEST_MAX_FUNCS_IN_SET];
+  //int test_func_count;
+  //int current_test_func_index;
   const char* name;
   int failed;
 };

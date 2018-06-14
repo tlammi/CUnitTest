@@ -25,4 +25,7 @@ int LinkedList_getNext(struct LinkedList* handl, void** val, int* bytes);
 int LinkedList_getPrev(struct LinkedList* handl, void** val, int* bytes);
 int LinkedList_getCurr(struct LinkedList* handl, void** val, int* bytes);
 
+void LinkedList_setCurrToFront(struct LinkedList* handl);
+void LinkedList_setCurrToBack(struct LinkedList* handl);
+
 #endif

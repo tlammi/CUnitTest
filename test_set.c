@@ -5,10 +5,8 @@
 
 struct TestSet TestSet_newTestSet(const char* name){
   struct TestSet ts;
-  memset(&ts, 0, sizeof(ts));
-  ts.test_func_count = 0;
+  ts.list = LinkedList_new();
   ts.name = name;
-  ts.current_test_func_index = 0;
   ts.failed = 0;
 
   return ts;
@@ -16,7 +14,7 @@ struct TestSet TestSet_newTestSet(const char* name){
 
 
 void TestSet_destroy(struct TestSet* handl){
-  
+
 }
 
 void TestSet_addTestFunc(struct TestSet* handl, const char* funcname, test_func funcptr){
@@ -28,13 +26,8 @@ void TestSet_addTestFunc(struct TestSet* handl, const char* funcname, test_func 
     printErr("handl cannot be NULL\n");
     return;
   }
-  if(handl->test_func_count >= C_UNIT_TEST_MAX_FUNCS_IN_SET){
-    printErr("Too many functions in a set\n");
-    return;
-  }
-  handl->test_funcs[handl->test_func_count] = TestFunc_newTestFunc(funcname, funcptr);
-  handl->test_func_count++;
-
+  struct TestFunc tf = TestFunc_newTestFunc(funcname,funcptr);
+  LinkedList_pushBack(&handl->list, (void*)&tf, sizeof(tf));
 }
 
 void TestSet_exec(struct TestSet* handl){
@@ -43,11 +36,18 @@ void TestSet_exec(struct TestSet* handl){
             "####################################################\n\n"RESET,
             handl->name);
 
-  for(handl->current_test_func_index=0;
-      handl->current_test_func_index<handl->test_func_count;
-      handl->current_test_func_index++){
-    TestFunc_exec(&handl->test_funcs[handl->current_test_func_index]);
+  struct TestFunc* func;
+  int size;
+  int ret_val;
+  LinkedList_setCurrToFront(&handl->list);
+  ret_val = LinkedList_getCurr(&handl->list, (void**)&func, &size);
+
+  while(ret_val == 0){
+    TestFunc_exec(func);
+    ret_val = LinkedList_getNext(&handl->list, (void**)&func, &size);
   }
+
+  printDebug("in the end\n");
 }
 
 const char* TestSet_getName(struct TestSet* handl){
@@ -56,21 +56,34 @@ const char* TestSet_getName(struct TestSet* handl){
 
 
 void TestSet_registerFailure(struct TestSet* handl, const char* info_str){
-  if(TestFunc_getFailed(&handl->test_funcs[handl->current_test_func_index]) == 0){
+  struct TestFunc *current_func;
+  int size, ret_val;
+
+  ret_val = LinkedList_getCurr(&handl->list, (void**)&current_func, &size);
+
+  if(ret_val == 0){
+    if(TestFunc_getFailed(current_func) == 0){
+      handl->failed++;
+    }
+
+    TestFunc_registerFailure(current_func, info_str);
+  }
+  /*if(TestFunc_getFailed(&handl->test_funcs[handl->current_test_func_index]) == 0){
     handl->failed++;
   }
 
   TestFunc_registerFailure(&handl->test_funcs[handl->current_test_func_index], info_str);
+  */
 }
 
 void TestSet_setFailed(struct TestSet* handl, int failed){
-  if(handl == NULL) {
+  /*if(handl == NULL) {
     printErr("handl cannot be NULL\n");
     return;
   }
 
   handl->failed = failed;
-  TestFunc_setFailed(&handl->test_funcs[handl->current_test_func_index], 1);
+  TestFunc_setFailed(&handl->test_funcs[handl->current_test_func_index], 1);*/
 }
 
 int TestSet_getFailed(struct TestSet* handl){
@@ -84,9 +97,16 @@ int TestSet_getFailed(struct TestSet* handl){
 
 
 void TestSet_printFailedFunctions(struct TestSet* handl){
-  int i;
-  for(i=0; i<handl->test_func_count; i++){
-    printErr("\t%s\n",TestFunc_getName(&handl->test_funcs[i]));
-    TestFunc_printFailedAsserts(&handl->test_funcs[i]);
+
+  LinkedList_setCurrToFront(&handl->list);
+
+  struct TestFunc* func;
+  int size, ret_val;
+
+  ret_val = LinkedList_getCurr(&handl->list, (void**)&func, &size);
+  while(ret_val == 0){
+    TestFunc_printFailedAsserts(func);
+    ret_val = LinkedList_getNext(&handl->list, (void**)&func, &size);
   }
+
 }
