@@ -1,4 +1,5 @@
-#include "c_unit_test.h"
+#include "c_unit_test_priv.h"
+#include "print.h"
 
 static inline void printPrefix(const char* file,
                                const char* func,

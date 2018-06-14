@@ -1,6 +1,4 @@
 
-#include "c_unit_test.h"
-
 #include "test_set.h"
 #include "test_func.h"
 #include "test_thread.h"
