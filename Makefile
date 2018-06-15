@@ -52,5 +52,7 @@ ${BUILD_SUB_DIRS}:
 ${BUILD_DIR}/${SRC_DIR}/%.o: ${SRC_DIR}/%.c
 	${CC} ${C_FLAGS} -c ${INCLUDE_DIRS_PRIV} $< -o $@
 
+# Build all binaries under test/ as individual binaries.
+# All headers are included even though not needed in every case
 ${BUILD_DIR}/${TEST_SRC_DIR}/%.out: ${TEST_SRC_DIR}/%.c static_lib
 	gcc ${C_FLAGS} ${INCLUDE_DIRS_PRIV} ${INCLUDE_DIR_PUB} $< -L . -l:lib${LIB_NAME}.a -o $@

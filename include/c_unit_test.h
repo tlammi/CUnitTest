@@ -2,10 +2,6 @@
 #define C_UNIT_TEST_H
 
 
-#include <string.h>
-
-#include "print.h"
-
 /*
  * \brief Test function template
 */
@@ -38,65 +34,37 @@ void CUnitTest_execute(void);
  *
 */
 #define CUnitTest_assert(assertion) do{\
-  printNote("Testing CUnitTest_assert(" #assertion")...\n");                                       \
-  if(!(assertion)){                                                           \
-    __CUnitTest_logAssertError(__FILE__, __FUNCTION__, __LINE__, #assertion);\
-  } else {                                                                    \
-    printOK("Assertion" BOLD " ok\n" RESET);                                                 \
-  }                                                                           \
+  __CUnitTest_assertFunc(__FILE__, __FUNCTION__, __LINE__, assertion, #assertion);\
 }while(0)
+void __CUnitTest_assertFunc(const char* file, const char* func, int line, char assertion, const char* assertion_str);
 
 /*
  * \brief Assert that values (integer) are equal
 */
 #define CUnitTest_assertEqual(val1, val2) do{\
-  printNote("Testing CUnitTest_assertEqual("#val1", " #val2")...\n");\
-  if(val1 != val2){\
-    __CUnitTest_logAssertEqualError(__FILE__, __FUNCTION__, __LINE__, val1, val2);\
-  } else{\
-    printOK("Assertion" BOLD " ok\n" RESET);\
-  }\
+  __CUnitTest_assertEqualFunc(__FILE__, __FUNCTION__, __LINE__, val1, val2, #val1, #val2);\
 }while(0)
+void __CUnitTest_assertEqualFunc(const char* file, const char* func, int line, int val1, int val2, const char* val1str, const char* val2str);
 
 /*
  * \brief Assert that values are non-equal
 */
 #define CUnitTest_assertNotEqual(val1, val2)do{\
-  printNote("Testing CUnitTest_assertNotEqual("#val1", " #val2")...\n");\
-  if(val1 == val2){\
-    __CUnitTest_logAssertNotEqualError(__FILE__, __FUNCTION__, __LINE__, val1, val2);\
-  } else {\
-    printOK("Assertion" BOLD " ok\n" RESET);\
-  }\
+  __CUnitTest_assertNotEqualFunc(__FILE__, __FUNCTION__, __LINE__, val1, val2, #val1, #val2);\
 }while(0)
+void __CUnitTest_assertNotEqualFunc(const char* file, const char* func, int line, int val1, int val2, const char* val1str, const char* val2str);
 
 /*
  * \brief Assert that strings are equal
 */
 #define CUnitTest_assertStrEqual(str1, str2)do{\
-  printNote("Testing CUnitTest_assertStrEqual("#str1", "#str2")...\n");\
-  if(strcmp(str1, str2)){\
-    __CUnitTest_logAssertStrEqualError(__FILE__, __FUNCTION__, __LINE__, str1, str2);\
-  } else{\
-    printOK("Assertion" BOLD " ok\n" RESET);\
-  }\
+  __CUnitTest_assertStrEqualFunc(__FILE__, __FUNCTION__, __LINE__, str1, str2);\
 }while(0);
+void __CUnitTest_assertStrEqualFunc(const char* file, const char* func, int line, const char* str1, const char* str2);
 
-
-void __CUnitTest_logAssertError(const char* file, const char* func, const int line, const char* assertion);
-
-void __CUnitTest_logAssertEqualError(const char* file, const char* func,
-                                   const int line, const int val1, const int val2);
-
-void __CUnitTest_logAssertNotEqualError(const char* file, const char* func,
-                                   const int line, const int val1, const int val2);
-
-void __CUnitTest_logAssertStrEqualError(const char* file, const char* func,
-                                   const int line, const char* str1, const char* str2);
 
 
 void __CUnitTest_addTestFunc(const char* test_set_name,
                                      test_func funcptr, const char* func_name);
-
 
 #endif
