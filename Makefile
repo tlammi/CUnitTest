@@ -23,7 +23,7 @@ INCLUDE_DIR_PUB = -I include
 
 .PHONY: build_directories all clean cleanall static_lib
 
-all: static_lib dyn_lib tests
+all: static_lib tests
 
 lib: static_lib
 
@@ -34,6 +34,7 @@ static_lib: build_directories ${OBJS}
 	ar rcs lib${LIB_NAME}.a ${OBJS}
 
 tests: build_directories ${TEST_OUTPUTS}
+	@echo "TBA: automatically execute tests"
 
 # Sub directories under build dir
 build_directories: ${BUILD_SUB_DIRS}
@@ -51,5 +52,5 @@ ${BUILD_SUB_DIRS}:
 ${BUILD_DIR}/${SRC_DIR}/%.o: ${SRC_DIR}/%.c
 	${CC} ${C_FLAGS} -c ${INCLUDE_DIRS_PRIV} $< -o $@
 
-${BUILD_DIR}/${TEST_SRC_DIR}/%.out: ${TEST_SRC_DIR}/%.c ${OBJS}
-	gcc ${C_FLAGS} ${INCLUDE_DIRS_PRIV} ${INCLUDE_DIR_PUB} ${OBJS} $< -o $@
+${BUILD_DIR}/${TEST_SRC_DIR}/%.out: ${TEST_SRC_DIR}/%.c static_lib
+	gcc ${C_FLAGS} ${INCLUDE_DIRS_PRIV} ${INCLUDE_DIR_PUB} $< -L . -l:lib${LIB_NAME}.a -o $@
