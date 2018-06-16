@@ -47,7 +47,7 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
 }
 
 
-void CUnitTest_execute(void){
+int __CUnitTest_execute(void){
 
   pid_t tid = syscall(SYS_gettid);
   printDebug("main tid: %d\n",tid);
@@ -65,14 +65,16 @@ void CUnitTest_execute(void){
   }
   printNote("Failed test sets and functions:\n");
   int i;
+  int failed = 0;
   for(i=0; i<gtsdb.set_count; i++){
     if(TestSet_getFailed(&gtsdb.test_sets[i])){
       printErr("%s\n",TestSet_getName(&gtsdb.test_sets[i]))
       TestSet_printFailedFunctions(&gtsdb.test_sets[i]);
+      failed++;
     }
   }
 
-
+  return failed;
 
 }
 

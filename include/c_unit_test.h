@@ -1,6 +1,7 @@
 #ifndef C_UNIT_TEST_H
 #define C_UNIT_TEST_H
 
+#include <stdlib.h>
 
 /*
  * \brief Test function template
@@ -23,8 +24,15 @@ do{\
 
 /*
  * \brief Execute regitered tests
+ *
+ * Executes all test sets and test functions registered in these test sets and
+ * exits the process with number of failed test sets.
 */
-void CUnitTest_execute(void);
+#define CUnitTest_execute()\
+do{\
+  exit(__CUnitTest_execute());\
+}while(0)
+int __CUnitTest_execute(void);
 
 
 
