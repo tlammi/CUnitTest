@@ -78,12 +78,12 @@ int __CUnitTest_execute(void){
   }
   printOK("Sets ok: %d\n", sets_success);
   printErr("Sets failed: %d\n", sets_failed);
-
+  printErr("Failed sets:\n");
   int i;
   int failed = 0;
   for(i=0; i<gtsdb.set_count; i++){
     if(TestSet_getFailed(&gtsdb.test_sets[i])){
-      printErr("%s results:\n",TestSet_getName(&gtsdb.test_sets[i]));
+      printErr("\t%s:\n",TestSet_getName(&gtsdb.test_sets[i]));
       TestSet_printFailedFunctions(&gtsdb.test_sets[i]);
       failed++;
     }

@@ -101,12 +101,16 @@ void TestSet_printFailedFunctions(struct TestSet* handl){
 
   struct TestFunc* func;
   int size, ret_val;
-  printNote("\tExecuted functions: %d\n",LinkedList_getCount(&handl->list));
-  printOK("\tFunctions ok: %d\n", LinkedList_getCount(&handl->list) - handl->failed);
-  printErr("\tFunctions failed: %d\n", handl->failed);
+  printNote("\t\tExecuted functions: %d\n",LinkedList_getCount(&handl->list));
+  printOK("\t\tFunctions ok: %d\n", LinkedList_getCount(&handl->list) - handl->failed);
+  printErr("\t\tFunctions failed: %d\n", handl->failed);
+  printErr("\t\tFailed Test functions:\n");
 
   ret_val = LinkedList_getCurr(&handl->list, (void**)&func, &size);
   while(ret_val == 0){
+    if(TestFunc_getFailed(func)){
+      printErr("\t\t\t%s:\n",TestFunc_getName(func));
+    }
     TestFunc_printFailedAsserts(func);
     ret_val = LinkedList_getNext(&handl->list, (void**)&func, &size);
   }

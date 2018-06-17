@@ -66,9 +66,9 @@ void __CUnitTest_assertNotEqualFunc(const char* file, const char* func, int line
  * \brief Assert that strings are equal
 */
 #define CUnitTest_assertStrEqual(str1, str2)do{\
-  __CUnitTest_assertStrEqualFunc(__FILE__, __FUNCTION__, __LINE__, str1, str2);\
+  __CUnitTest_assertStrEqualFunc(__FILE__, __FUNCTION__, __LINE__, str1, str2, #str1, #str2);\
 }while(0);
-void __CUnitTest_assertStrEqualFunc(const char* file, const char* func, int line, const char* str1, const char* str2);
+void __CUnitTest_assertStrEqualFunc(const char* file, const char* func, int line, const char* str1, const char* str2, const char* str1str, const char* str2str);
 
 
 

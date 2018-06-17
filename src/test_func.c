@@ -54,7 +54,7 @@ void TestFunc_printFailedAsserts(struct TestFunc* handl){
   int ret_val;
   ret_val = LinkedList_getCurr(&handl->list, (void**)&info_str, &str_len);
   while(ret_val == 0){
-    printf("%s\n", info_str);
+    printErr("\t\t\t\t%s\n", info_str);
     ret_val = LinkedList_getNext(&handl->list, (void**)&info_str, &str_len);
   }
 }
