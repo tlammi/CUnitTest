@@ -44,6 +44,9 @@ cleanall: clean
 
 clean:
 	rm -rf build/*
+	rm -f lib${LIB_NAME}.a
+	# This does not exist yet but included for future additions
+	rm -f lib${LIB_NAME}.so
 
 ${BUILD_SUB_DIRS}:
 	mkdir -p $@
