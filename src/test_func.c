@@ -19,11 +19,14 @@ void TestFunc_destroy(struct TestFunc* handl){
 
 
 void TestFunc_exec(struct TestFunc* handl){
-  printNote("\n"
-            BOLD"##### executing function: %s #####\n"RESET
-            "\n",
+  printNote(BOLD"executing %s...\n"RESET,
             handl->name);
   handl->test_func_ptr();
+  if(!handl->failed){
+    printOK(BOLD"%s passed\n"RESET, handl->name);
+  } else {
+    printErr(BOLD"%s failed\n"RESET, handl->name);
+  }
 }
 
 void TestFunc_registerFailure(struct TestFunc* handl, const char* info_str){

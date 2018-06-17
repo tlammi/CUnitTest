@@ -49,20 +49,17 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
 
 int __CUnitTest_execute(void){
 
-  pid_t tid = syscall(SYS_gettid);
-  printDebug("main tid: %d\n",tid);
-  printDebug("main pid:%d\n",getpid());
+  printNote("Starting test execution...\n");
 
   int thread_count = gtsdb.thread_count;
-
   for(int i = 0; i<thread_count; i++){
     gtsdb.test_threads[i] = TestThread_init(gtsdb.test_sets, gtsdb.set_count, i, thread_count);
     TestThread_exec(&gtsdb.test_threads[i]);
   }
-
   for(int i = 0; i < thread_count; i++){
     TestThread_join(&gtsdb.test_threads[i]);
   }
+  printNote("Tests executed.\n\n");
 
   printNote("Registered test sets: %d\n", gtsdb.set_count);
 
@@ -78,7 +75,7 @@ int __CUnitTest_execute(void){
   }
   printOK("Sets ok: %d\n", sets_success);
   printErr("Sets failed: %d\n", sets_failed);
-  printErr("Failed sets:\n");
+  printNote("Failed sets:\n");
   int i;
   int failed = 0;
   for(i=0; i<gtsdb.set_count; i++){
@@ -114,7 +111,6 @@ static struct TestThread* getTestThread(){
 }
 
 void __CUnitTest_registerFailure(const char* info_str){
-  printDebug("Registering failure\n");
   struct TestThread* thread = getTestThread();
   if(thread != NULL){
     TestThread_registerFailure(thread, info_str);

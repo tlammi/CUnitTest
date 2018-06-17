@@ -15,6 +15,10 @@ void my_test_func(void){
 
 }
 
+void test_func_success(void){
+  CUnitTest_assert(0 == 0);
+}
+
 void my_test_func_2(void){
 
   CUnitTest_assert(100 == 190);
@@ -30,7 +34,10 @@ int main(){
 
   CUnitTest_addTestSet("My set 2");
   CUnitTest_addTestFunc("My set 2", my_test_func);
+  CUnitTest_addTestFunc("My set 2", test_func_success);
 
+  CUnitTest_addTestSet("Success set");
+  CUnitTest_addTestFunc("Success set", test_func_success);
   CUnitTest_execute();
 
 }

@@ -31,10 +31,10 @@ void TestSet_addTestFunc(struct TestSet* handl, const char* funcname, test_func 
 }
 
 void TestSet_exec(struct TestSet* handl){
-  printNote(BOLD"####################################################\n"
+  /*printNote(BOLD"####################################################\n"
             "# executing set: %s\n"
             "####################################################\n\n"RESET,
-            handl->name);
+            handl->name);*/
 
   struct TestFunc* func;
   int size;
@@ -46,8 +46,6 @@ void TestSet_exec(struct TestSet* handl){
     TestFunc_exec(func);
     ret_val = LinkedList_getNext(&handl->list, (void**)&func, &size);
   }
-
-  printDebug("in the end\n");
 }
 
 const char* TestSet_getName(struct TestSet* handl){
@@ -104,7 +102,7 @@ void TestSet_printFailedFunctions(struct TestSet* handl){
   printNote("\t\tExecuted functions: %d\n",LinkedList_getCount(&handl->list));
   printOK("\t\tFunctions ok: %d\n", LinkedList_getCount(&handl->list) - handl->failed);
   printErr("\t\tFunctions failed: %d\n", handl->failed);
-  printErr("\t\tFailed Test functions:\n");
+  printNote("\t\tFailed Test functions:\n");
 
   ret_val = LinkedList_getCurr(&handl->list, (void**)&func, &size);
   while(ret_val == 0){
