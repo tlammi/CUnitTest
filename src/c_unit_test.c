@@ -1,4 +1,3 @@
-
 #include "test_set.h"
 #include "test_func.h"
 #include "test_thread.h"
@@ -6,6 +5,12 @@
 #include "print.h"
 
 #include <string.h>
+
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
+
 
 struct TestSetDatabase{
   int set_count;
@@ -37,7 +42,8 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
     printErr("No registered sets\n");
     return;
   }
-  if(strcmp(test_set_name, TestSet_getName(&gtsdb.test_sets[gtsdb.set_count-1]))){
+  if(strcmp(test_set_name,
+            TestSet_getName(&gtsdb.test_sets[gtsdb.set_count-1]))){
     printErr("Functions currently have to be added to latest set\n");
     return;
   }
@@ -53,7 +59,8 @@ int __CUnitTest_execute(void){
 
   int thread_count = gtsdb.thread_count;
   for(int i = 0; i<thread_count; i++){
-    gtsdb.test_threads[i] = TestThread_init(gtsdb.test_sets, gtsdb.set_count, i, thread_count);
+    gtsdb.test_threads[i] =
+      TestThread_init(gtsdb.test_sets, gtsdb.set_count, i, thread_count);
     TestThread_exec(&gtsdb.test_threads[i]);
   }
   for(int i = 0; i < thread_count; i++){
@@ -96,7 +103,8 @@ static struct TestThread* getTestThread(){
   // Guess for the offset in array
   long offset = tid - getpid();
 
-  if(offset < gtsdb.thread_count && TestThread_getTid(&gtsdb.test_threads[offset]) == tid){
+  if(offset < gtsdb.thread_count &&
+      TestThread_getTid(&gtsdb.test_threads[offset]) == tid){
     return &gtsdb.test_threads[offset];
   } else{
     for(int i = 0; i < gtsdb.thread_count; i++){

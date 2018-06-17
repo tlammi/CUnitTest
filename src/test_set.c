@@ -17,7 +17,9 @@ void TestSet_destroy(struct TestSet* handl){
 
 }
 
-void TestSet_addTestFunc(struct TestSet* handl, const char* funcname, test_func funcptr){
+void TestSet_addTestFunc(struct TestSet* handl, const char* funcname,
+  test_func funcptr){
+
   if(funcptr == NULL){
     printErr("funcptr cannot be NULL\n");
     return;
@@ -31,10 +33,6 @@ void TestSet_addTestFunc(struct TestSet* handl, const char* funcname, test_func 
 }
 
 void TestSet_exec(struct TestSet* handl){
-  /*printNote(BOLD"####################################################\n"
-            "# executing set: %s\n"
-            "####################################################\n\n"RESET,
-            handl->name);*/
 
   struct TestFunc* func;
   int size;
@@ -66,22 +64,6 @@ void TestSet_registerFailure(struct TestSet* handl, const char* info_str){
 
     TestFunc_registerFailure(current_func, info_str);
   }
-  /*if(TestFunc_getFailed(&handl->test_funcs[handl->current_test_func_index]) == 0){
-    handl->failed++;
-  }
-
-  TestFunc_registerFailure(&handl->test_funcs[handl->current_test_func_index], info_str);
-  */
-}
-
-void TestSet_setFailed(struct TestSet* handl, int failed){
-  /*if(handl == NULL) {
-    printErr("handl cannot be NULL\n");
-    return;
-  }
-
-  handl->failed = failed;
-  TestFunc_setFailed(&handl->test_funcs[handl->current_test_func_index], 1);*/
 }
 
 int TestSet_getFailed(struct TestSet* handl){
@@ -100,7 +82,8 @@ void TestSet_printFailedFunctions(struct TestSet* handl){
   struct TestFunc* func;
   int size, ret_val;
   printNote("\t\tExecuted functions: %d\n",LinkedList_getCount(&handl->list));
-  printOK("\t\tFunctions ok: %d\n", LinkedList_getCount(&handl->list) - handl->failed);
+  printOK("\t\tFunctions ok: %d\n",
+    LinkedList_getCount(&handl->list) - handl->failed);
   printErr("\t\tFunctions failed: %d\n", handl->failed);
   printNote("\t\tFailed Test functions:\n");
 

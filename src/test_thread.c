@@ -1,8 +1,15 @@
 #include "test_thread.h"
 
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
 
 
-struct TestThread TestThread_init(struct TestSet* arr, int arr_size, int offset, int thread_count){
+
+struct TestThread TestThread_init(struct TestSet* arr, int arr_size,
+  int offset, int thread_count){
+
   struct TestThread t = {
     .tid = 0,
     .ptid = 0,
@@ -38,7 +45,9 @@ void TestThread_join(struct TestThread* thread){
   pthread_join(thread->ptid, NULL);
 }
 
-void TestThread_registerFailure(struct TestThread* thread, const char* info_str){
+void TestThread_registerFailure(struct TestThread* thread,
+  const char* info_str){
+
   TestSet_registerFailure(thread->current_set, info_str);
 }
 

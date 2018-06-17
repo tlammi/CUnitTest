@@ -1,5 +1,3 @@
-
-//#include <stdio.h>
 #include "c_unit_test.h"
 
 void my_test_func(void){

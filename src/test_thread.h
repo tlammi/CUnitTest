@@ -7,11 +7,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#define _GNU_SOURCE
-#include <unistd.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-
 struct TestThread{
   pid_t tid;
   pthread_t ptid;
@@ -22,13 +17,15 @@ struct TestThread{
   int offset;
 };
 
-struct TestThread TestThread_init(struct TestSet* arr, int arr_size, int offset, int thread_count);
+struct TestThread TestThread_init(struct TestSet* arr, int arr_size,
+  int offset, int thread_count);
 
 void TestThread_exec(struct TestThread* thread);
 
 void TestThread_join(struct TestThread* thread);
 
-void TestThread_registerFailure(struct TestThread* thread, const char* info_str);
+void TestThread_registerFailure(struct TestThread* thread,
+  const char* info_str);
 
 pid_t TestThread_getTid(struct TestThread* thread);
 

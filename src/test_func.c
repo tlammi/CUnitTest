@@ -36,10 +36,6 @@ void TestFunc_registerFailure(struct TestFunc* handl, const char* info_str){
   }
 }
 
-void TestFunc_setFailed(struct TestFunc* handl, int failed){
-  handl->failed = failed;
-}
-
 
 int TestFunc_getFailed(struct TestFunc* handl){
   return handl->failed;

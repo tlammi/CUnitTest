@@ -70,7 +70,6 @@ void LinkedList_pushFront(struct LinkedList* handl, const void* val, int bytes){
 }
 
 int LinkedList_getNext(struct LinkedList* handl, void** val, int* bytes){
-  //printDebug("current: %d, tail: %d, current->next: %d\n",handl->current, handl->tail, handl->current->next);
   if(handl->current == handl->tail) return -1;
   handl->current = handl->current->next;
   *val = &handl->current->val;
