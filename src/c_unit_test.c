@@ -63,12 +63,27 @@ int __CUnitTest_execute(void){
   for(int i = 0; i < thread_count; i++){
     TestThread_join(&gtsdb.test_threads[i]);
   }
-  printNote("Failed test sets and functions:\n");
+
+  printNote("Registered test sets: %d\n", gtsdb.set_count);
+
+  int sets_failed = 0;
+  int sets_success = 0;
+
+  for(int i = 0; i < gtsdb.set_count; i++){
+    if(TestSet_getFailed(&gtsdb.test_sets[i])){
+      sets_failed++;
+    } else {
+      sets_success++;
+    }
+  }
+  printOK("Sets ok: %d\n", sets_success);
+  printErr("Sets failed: %d\n", sets_failed);
+
   int i;
   int failed = 0;
   for(i=0; i<gtsdb.set_count; i++){
     if(TestSet_getFailed(&gtsdb.test_sets[i])){
-      printErr("%s\n",TestSet_getName(&gtsdb.test_sets[i]))
+      printErr("%s results:\n",TestSet_getName(&gtsdb.test_sets[i]));
       TestSet_printFailedFunctions(&gtsdb.test_sets[i]);
       failed++;
     }

@@ -8,7 +8,8 @@ struct LinkedList LinkedList_new(void){
   struct LinkedList l = {
     .head = NULL,
     .current = NULL,
-    .tail = NULL
+    .tail = NULL,
+    .count = 0
   };
   return l;
 }
@@ -21,6 +22,10 @@ void LinkedList_destroy(struct LinkedList* handl){
     free(ptr->prev);
   }
   free(ptr);
+}
+
+int LinkedList_getCount(struct LinkedList* handl){
+  return handl->count;
 }
 
 void LinkedList_pushBack(struct LinkedList* handl, const void* val, int bytes){
@@ -41,6 +46,8 @@ void LinkedList_pushBack(struct LinkedList* handl, const void* val, int bytes){
     handl->tail = ptr;
     handl->current = ptr;
   }
+
+  handl->count++;
 }
 
 void LinkedList_pushFront(struct LinkedList* handl, const void* val, int bytes){
@@ -59,7 +66,7 @@ void LinkedList_pushFront(struct LinkedList* handl, const void* val, int bytes){
     handl->tail = ptr;
     handl->current = ptr;
   }
-
+  handl->count++;
 }
 
 int LinkedList_getNext(struct LinkedList* handl, void** val, int* bytes){

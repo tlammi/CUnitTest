@@ -5,7 +5,8 @@
 void my_test_func(void){
   CUnitTest_assert(1 == 0);
   CUnitTest_assert(1 == 1);
-  CUnitTest_assertEqual(1,0);
+  int var = 1;
+  CUnitTest_assertEqual(var,0);
   CUnitTest_assertEqual(1,1);
   CUnitTest_assertNotEqual(1,1);
   CUnitTest_assertNotEqual(1,0);

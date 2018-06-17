@@ -17,25 +17,29 @@ void __CUnitTest_logAssertError(const char* file,
                               const char* assertion){
   printPrefix(file, func, line);
   printErr("assertion: %s\n",assertion);
-  __CUnitTest_registerFailure("1");
+  char buffer[C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN];
+  snprintf(buffer, C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN, "CUnitTest_assert(%s)", assertion);
+  __CUnitTest_registerFailure(buffer);
 }
 
 void __CUnitTest_logAssertEqualError(const char* file, const char* func,
                                    const int line, const int val1,
-                                   const int val2){
+                                   const int val2, const char* val1str, const char* val2str){
   printPrefix(file, func, line);
   printErr("first value: %d\n\tsecond value: %d\n",val1, val2);
-  __CUnitTest_registerFailure("2");
+  char buffer[C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN];
+  snprintf(buffer, C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN, "CUnitTest_assertEqual(%s, %s), values were %d and %d", val1str, val2str, val1, val2);
+  __CUnitTest_registerFailure(buffer);
 }
 
 void __CUnitTest_logAssertNotEqualError(const char* file, const char* func,
-                                   const int line, const int val1,
-                                   const int val2){
-  (void)val1;
-  (void)val2;
+                                   const int line, const int val,
+                                   const char* val1str, const char* val2str){
   printPrefix(file, func, line);
   printErr("Values were equal\n");
-  __CUnitTest_registerFailure("3");
+  char buffer[C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN];
+  snprintf(buffer, C_UNIT_TEST_MAX_ASSERT_INFO_STR_LEN, "CUnitTest_assertNotEqual(%s, %s), value was %d", val1str, val2str, val);
+  __CUnitTest_registerFailure(buffer);
 }
 
 void __CUnitTest_logAssertStrEqualError(const char* file, const char* func,
@@ -60,7 +64,7 @@ void __CUnitTest_assertFunc(const char* file, const char* func, int line, char a
 void __CUnitTest_assertEqualFunc(const char* file, const char* func, int line, int val1, int val2, const char* val1str, const char* val2str){
   printNote("Testing CUnitTest_assertEqual(%s, %s)...\n", val1str, val2str);
   if(val1 != val2){\
-    __CUnitTest_logAssertEqualError(file, func, line, val1, val2);
+    __CUnitTest_logAssertEqualError(file, func, line, val1, val2, val1str, val2str);
   } else{\
     printOK("Assertion" BOLD " ok\n" RESET);\
   }\
@@ -69,8 +73,9 @@ void __CUnitTest_assertEqualFunc(const char* file, const char* func, int line, i
 void __CUnitTest_assertNotEqualFunc(const char* file, const char* func, int line, int val1, int val2, const char* val1str, const char* val2str){
   printNote("Testing CUnitTest_assertNotEqual(%s,  %s)...\n",
     val1str, val2str);
+  (void) val2;
   if(val1 == val2){
-    __CUnitTest_logAssertNotEqualError(file, func, line, val1, val2);
+    __CUnitTest_logAssertNotEqualError(file, func, line, val1, val1str, val2str);
   } else {
     printOK("Assertion" BOLD " ok\n" RESET);
   }

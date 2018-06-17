@@ -12,10 +12,13 @@ struct LinkedList {
   struct LinkedNode* head;
   struct LinkedNode* current;
   struct LinkedNode* tail;
+  int count;
 };
 
 struct LinkedList LinkedList_new(void);
 void LinkedList_destroy(struct LinkedList* handl);
+
+int LinkedList_getCount(struct LinkedList* handl);
 
 void LinkedList_pushBack(struct LinkedList* handl, const void* val, int bytes);
 
