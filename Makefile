@@ -21,6 +21,8 @@ BUILD_SUB_DIRS = $(addprefix ${BUILD_DIR}/,${SUB_DIRS})
 INCLUDE_DIRS_PRIV = $(addprefix -I , $(shell find ${SRC_DIR} -type d))
 INCLUDE_DIR_PUB = -I include
 
+DOXYGEN_BIN_PATH := $(shell command -v doxygen 2> /dev/null)
+
 .PHONY: build_directories all clean cleanall static_lib
 
 all: static_lib tests
@@ -48,7 +50,12 @@ clean:
 	# This does not exist yet but included for future additions
 	rm -f lib${LIB_NAME}.so
 
+doc: doxygen
+
 doxygen:
+ifndef DOXYGEN_BIN_PATH
+	$(error "Doxygen not present in the machine. Install doxygen")
+endif
 	# Force work dir to project root dir
 	cd $(dir $(abspath $(MAKEFILE_LIST)))
 	doxygen
