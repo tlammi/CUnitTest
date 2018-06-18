@@ -48,6 +48,11 @@ clean:
 	# This does not exist yet but included for future additions
 	rm -f lib${LIB_NAME}.so
 
+doxygen:
+	# Force work dir to project root dir
+	cd $(dir $(abspath $(MAKEFILE_LIST)))
+	doxygen
+
 ${BUILD_SUB_DIRS}:
 	mkdir -p $@
 
