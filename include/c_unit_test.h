@@ -34,7 +34,6 @@ void CUnitTest_addTestSet(const char* test_set_name);
 
   \param test_set_name - Name of the set to wich the function belongs to
   \param test_func_ptr - Pointer to test function
-  \todo Functions can currently be added only into lastly added test set
 */
 #define CUnitTest_addTestFunc(test_set_name, test_func_ptr)\
 do{\
@@ -42,6 +41,20 @@ do{\
 }while(0)
 void __CUnitTest_addTestFunc(const char* test_set_name,
                                      test_func funcptr, const char* func_name);
+
+/**
+  \brief Add a test function to latest test set
+
+  Works similarly to CUnitTest_addTestFunc() but automatically adds the function
+  to the test set last registered.
+
+  \param test_func_ptr - Pointer to test function
+*/
+#define CUnitTest_pushTestFunc(test_func_ptr)\
+do{\
+  __CUnitTest_pushTestFunc(test_func_ptr, #test_func_ptr);\
+}while(0)
+void __CUnitTest_pushTestFunc(test_func funcptr, const char* func_name);
 
 /**
  * \brief Execute regitered tests

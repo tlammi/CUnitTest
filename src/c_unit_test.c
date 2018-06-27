@@ -42,14 +42,27 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
     printErr("No registered sets\n");
     return;
   }
-  if(strcmp(test_set_name,
-            TestSet_getName(&gtsdb.test_sets[gtsdb.set_count-1]))){
-    printErr("Functions currently have to be added to latest set\n");
+
+  for(int i = 0; i < gtsdb.set_count; i++){
+    if(! strcmp(test_set_name,
+              TestSet_getName(&gtsdb.test_sets[i]))){
+      TestSet_addTestFunc(&gtsdb.test_sets[i], func_name, funcptr);
+      return;
+    }
+  }
+
+  printErr("Test set not found, test function %s not registered\n", func_name);
+
+}
+
+
+void __CUnitTest_pushTestFunc(test_func funcptr, const char* func_name){
+  if(gtsdb.set_count == 0){
+    printErr("No registered sets\n");
     return;
   }
 
   TestSet_addTestFunc(&gtsdb.test_sets[gtsdb.set_count-1], func_name, funcptr);
-
 }
 
 

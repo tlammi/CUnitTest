@@ -28,14 +28,15 @@ void my_test_func_2(void){
 int main(){
   CUnitTest_addTestSet("My set");
   CUnitTest_addTestFunc("My set", my_test_func);
-  CUnitTest_addTestFunc("My set", my_test_func_2);
+  CUnitTest_pushTestFunc(my_test_func_2);
 
   CUnitTest_addTestSet("My set 2");
-  CUnitTest_addTestFunc("My set 2", my_test_func);
-  CUnitTest_addTestFunc("My set 2", test_func_success);
+  CUnitTest_pushTestFunc(test_func_success);
+  CUnitTest_pushTestFunc(my_test_func);
 
   CUnitTest_addTestSet("Success set");
   CUnitTest_addTestFunc("Success set", test_func_success);
+
   CUnitTest_execute();
 
 }
