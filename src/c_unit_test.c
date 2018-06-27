@@ -27,7 +27,7 @@ struct TestSetDatabase gtsdb = {
 void CUnitTest_addTestSet(const char* test_set_name){
   if(gtsdb.set_count == C_UNIT_TEST_MAX_TEST_SETS){
     printErr("Error: too many test sets.\n");
-    return;
+    exit(-1);
   }
   struct TestSet ts = TestSet_newTestSet(test_set_name);
 
@@ -40,7 +40,7 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
                 test_func funcptr, const char* func_name){
   if(gtsdb.set_count == 0){
     printErr("No registered sets\n");
-    return;
+    exit(-2);
   }
 
   for(int i = 0; i < gtsdb.set_count; i++){
@@ -52,14 +52,14 @@ void __CUnitTest_addTestFunc(const char* test_set_name,
   }
 
   printErr("Test set not found, test function %s not registered\n", func_name);
-
+  exit(-3);
 }
 
 
 void __CUnitTest_pushTestFunc(test_func funcptr, const char* func_name){
   if(gtsdb.set_count == 0){
     printErr("No registered sets\n");
-    return;
+    exit(-4);
   }
 
   TestSet_addTestFunc(&gtsdb.test_sets[gtsdb.set_count-1], func_name, funcptr);
