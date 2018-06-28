@@ -1,12 +1,12 @@
 CC = gcc
 LD = ld
-C_FLAGS = -Wall -pthread
+C_FLAGS = -Wall -pthread -g
 
 BUILD_DIR = build
 SRC_DIR = src
 TEST_SRC_DIR = test
 
-LIB_NAME = "cunittest"
+LIB_NAME = cunittest
 
 SRCS = $(shell find ${SRC_DIR} -name *.c)
 OBJS = $(addprefix ${BUILD_DIR}/, $(SRCS:%.c=%.o))
@@ -25,15 +25,28 @@ DOXYGEN_BIN_PATH := $(shell command -v doxygen 2> /dev/null)
 
 .PHONY: build_directories all clean cleanall static_lib
 
-all: static_lib tests
+# Default recipe
+all: tests
 
+# lib is a synonym for static lib
 lib: static_lib
 
+# Build a dynamic lib
 dyn_lib:
 	@echo "TBA"
 
+# Static build
 static_lib: build_directories ${OBJS}
 	ar rcs lib${LIB_NAME}.a ${OBJS}
+
+# Strip the produced libraries of debug symbols
+stripped: static_lib dyn_lib
+ifneq ("$(wildcard lib${LIB_NAME}.a)","")
+	strip -g lib${LIB_NAME}.a
+endif
+ifneq ("$(wildcard lib${LIB_NAME}.so)","")
+	strip -g lib${LIB_NAME}.so
+endif
 
 tests: build_directories ${TEST_OUTPUTS}
 	@echo "TBA: automatically execute tests"
