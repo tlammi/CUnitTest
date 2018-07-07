@@ -22,8 +22,15 @@ typedef void (*test_func)(void);
 struct TestFunc{
   const char* name; ///< Name of the test function
   test_func test_func_ptr; ///< Pointer to the test function
-  int failed; ///< How many assertions have failed
-  struct LinkedList list; ///< List containing failed assertions
+
+  int failed;
+  int succeeded;
+  /**
+    List containing assertions statuses. Statuses are placed in same indexes
+    as the info strings in field info_list
+  */
+  struct LinkedList failed_list;
+  struct LinkedList info_list; ///< List containing infos of failed assertions
 };
 
 /**
@@ -63,6 +70,9 @@ void TestFunc_exec(struct TestFunc* handl);
 */
 void TestFunc_registerFailure(struct TestFunc* handl, const char* info_str);
 
+
+void TestFunc_registerOk(struct TestFunc* handl, const char* info_str);
+
 /**
   \brief Get the number of failed asserts in the function
 
@@ -72,6 +82,9 @@ void TestFunc_registerFailure(struct TestFunc* handl, const char* info_str);
   \return Number of failed assertions
 */
 int TestFunc_getFailed(struct TestFunc* handl);
+
+
+int TestFunc_getSucceeded(struct TestFunc* handl);
 
 /**
   \brief Returns a reference to test function name stored in TestFunc
@@ -91,5 +104,8 @@ const char* TestFunc_getName(struct TestFunc* handl);
 
 */
 void TestFunc_printFailedAsserts(struct TestFunc* handl);
+
+struct LinkedList TestFunc_getFailedList(struct TestFunc* handl);
+struct LinkedList TestFunc_getInfoList(struct TestFunc* handl);
 
 #endif
