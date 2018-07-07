@@ -97,3 +97,10 @@ void TestSet_printFailedFunctions(struct TestSet* handl){
   }
 
 }
+
+
+
+
+struct LinkedList TestSet_getTestFuncs(struct TestSet* handl){
+  return handl->list;
+}

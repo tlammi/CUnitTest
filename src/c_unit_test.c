@@ -2,6 +2,7 @@
 #include "test_func.h"
 #include "test_thread.h"
 
+#include "printer.h"
 #include "print.h"
 
 #include <string.h>
@@ -93,20 +94,10 @@ int __CUnitTest_execute(void){
       sets_success++;
     }
   }
-  printOK("Sets ok: %d\n", sets_success);
-  printErr("Sets failed: %d\n", sets_failed);
-  printNote("Failed sets:\n");
-  int i;
-  int failed = 0;
-  for(i=0; i<gtsdb.set_count; i++){
-    if(TestSet_getFailed(&gtsdb.test_sets[i])){
-      printErr("\t%s:\n",TestSet_getName(&gtsdb.test_sets[i]));
-      TestSet_printFailedFunctions(&gtsdb.test_sets[i]);
-      failed++;
-    }
-  }
 
-  return failed;
+  Printer_printTestSetArray(gtsdb.test_sets, gtsdb.set_count, PrintPlain);
+
+  return sets_failed;
 
 }
 
