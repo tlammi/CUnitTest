@@ -11,7 +11,7 @@ struct CliFlag{
   void (*callback)();
 };
 
-struct CliFlag CliFlag_init(const char* long_flag, const char short_flag);
+struct CliFlag CliFlag_init(const char* long_flag, const char short_flag, char expects_val);
 
 void CliFlag_setFlagField(struct CliFlag* handl, char* flag_field, int flag_bit);
 

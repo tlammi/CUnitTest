@@ -4,11 +4,12 @@
 #include <stdio.h>
 
 
-struct CliFlag CliFlag_init(const char* long_flag, const char short_flag){
+struct CliFlag CliFlag_init(const char* long_flag, const char short_flag, char expects_val){
   struct CliFlag cf = {
     .long_flag = long_flag,
     .short_flag = short_flag,
-    .value = ""
+    .value = "",
+    .expects_val = expects_val
   };
 
   return cf;

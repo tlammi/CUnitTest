@@ -3,7 +3,98 @@
 #include "print.h"
 
 #define isFlag(flag_candidate) ((flag_candidate)[0] == '-')
+#define isNFlagsInArg(flag_arg, n) ((flag_arg)[n] != '\0')
 #define isLongFlag(flag_candidate) ((flag_candidate)[1] == '-')
+
+
+static int g_argi = 1;
+static int g_flag_sub_index = 1;
+static int g_argc = 1;
+static char** g_argv;
+
+static void initGetter(int argc, char* argv[]){
+  g_argc = argc;
+  g_argv = argv;
+  g_flag_sub_index = 1;
+  g_argi = 1;
+}
+
+static char* getNextArg(int* status){
+  char* retval = NULL;
+  if(g_argi < g_argc){
+    retval = g_argv[g_argi];
+    *status = 0;
+    g_argi += 1;
+  } else{
+    *status = -1;
+    retval =  NULL;
+  }
+  return retval;
+}
+
+static char* getNextCmd(int* status){
+  if(g_argi >= g_argc){
+    *status = -1;
+    return NULL;
+  }
+
+  if(isFlag(g_argv[g_argi])){
+    *status = -2;
+    return NULL;
+  }
+
+  *status = 0;
+  g_argi += 1;
+  return g_argv[g_argi-1];
+}
+
+static char* getNextFlag(int* status){
+  if(g_argi >= g_argc){
+    *status = -1;
+    return NULL;
+  }
+
+  if(!isFlag(g_argv[g_argi])){
+    *status = -3;
+    return NULL;
+  }
+
+  if(isLongFlag(g_argv[g_argi])){
+    *status = 0;
+    g_argi += 1;
+    return &g_argv[g_argi-1][2];
+  } else{
+    *status = 1;
+    char* retval = &g_argv[g_argi][g_flag_sub_index];
+
+    if(isNFlagsInArg(g_argv[g_argi], g_flag_sub_index+1)){
+      g_flag_sub_index += 1;
+    } else{
+      g_argi += 1;
+      g_flag_sub_index = 1;
+    }
+
+    return retval;
+
+  }
+}
+
+
+static char* getNextFlagVal(int* status){
+  if(g_argi >= g_argc){
+    *status = -1;
+    return NULL;
+  }
+
+  if(isFlag(g_argv[g_argi])){
+    *status = -2;
+    return NULL;
+  }
+
+  *status = 0;
+  g_argi += 1;
+  return g_argv[g_argi-1];
+}
 
 struct ArgParserCmd{
   const char* name;
@@ -62,6 +153,9 @@ int ArgParser_parse(int argc, char** argv, int(*dump_callback)(int, char**)){
         struct CliFlag* cur_flag = CliCmd_getLongFlag(gp_current_cmd, &current_arg[2]);
         if(cur_flag != NULL){
           printf("Flag %s is registered\n", current_arg);
+          if(cur_flag->expects_val){
+            printf("Flag expects a value\n");
+          }
           CliFlag_doRaiseFlag(cur_flag);
           CliFlag_doCallback(cur_flag);
         } else{

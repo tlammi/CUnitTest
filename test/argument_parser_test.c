@@ -29,8 +29,8 @@ int main(int argc, char** argv){
   };
 
   struct CliFlag run_flags[] = {
-    CliFlag_init("flag", 'f'),
-    CliFlag_init("opt", 'o')
+    CliFlag_init("flag", 'f', 1),
+    CliFlag_init("opt", 'o', 0)
   };
   ArgParser_setCommands(NULL, top_cmds, 4);
   ArgParser_setCommands(&top_cmds[0], run_cmds, 3);
