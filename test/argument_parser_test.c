@@ -12,6 +12,10 @@ void run_test_cb(){
   printf("In run callback\n");
 }
 
+void flag_callback(struct CliFlag* param){
+  printf("flag cb. Short flag: %c, long flag: %s, value: %s\n", param->short_flag, param->long_flag, param->value);
+}
+
 
 int main(int argc, char** argv){
 
@@ -29,8 +33,8 @@ int main(int argc, char** argv){
   };
 
   struct CliFlag run_flags[] = {
-    CliFlag_init("flag", 'f', 1),
-    CliFlag_init("opt", 'o', 0)
+    CliFlag_init("flag", 'f', 1, flag_callback),
+    CliFlag_init("opt", 'o', 0, flag_callback)
   };
   ArgParser_setCommands(NULL, top_cmds, 4);
   ArgParser_setCommands(&top_cmds[0], run_cmds, 3);
